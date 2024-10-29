@@ -140,7 +140,7 @@
                       const cellValue = cell.value.toString();
                       const serviceType = determineServiceType({ color: cellColor, color_theme: cellTheme });
   
-                      if (serviceType === '24H' && !/\d/.test(cellValue) && cellValue.trim() !== "") {
+                      if (!/\d/.test(cellValue) && cellValue.trim() !== "" && cellValue!== "GARDES DISPOS") {
                           uniqueNames.add(cellValue);
                       }
                   }
