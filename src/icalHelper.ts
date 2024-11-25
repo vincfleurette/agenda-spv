@@ -13,9 +13,9 @@ function getEventTimes(
   serviceType: string
 ): { start: Date; end: Date } {
   let date: Date;
-
+  console.log(dateValue);
   if (typeof dateValue === "string") {
-    const parts = new Intl.DateTimeFormat("fr-FR", {
+    const parts = new Intl.DateTimeFormat("en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
