@@ -29,8 +29,8 @@
       sheets = workbook.worksheets
         .map(sheet => sheet.name)
         .filter(sheetName => {
-          const yearMatch = sheetName.match(/\b\d{4}\b/);
-          return yearMatch && parseInt(yearMatch[0]) >= currentYear;
+          const yearMatch = "Disponibilités";
+          return yearMatch;
         });
 
       selectedSheetName = null;
@@ -73,11 +73,11 @@
 
     worksheet.eachRow((row, rowIndex) => {
       const rowValues = row.values.slice(1).map(value => value ? value.toString() : "");
-      const date = rowValues[1];
-      const equipe = rowValues[2];
+      const date = rowValues[0];
+      const equipe = rowValues[1];
 
-      const extraData = rowValues.slice(3).map((value, index) => {
-        const cell = row.getCell(index + 4);
+      const extraData = rowValues.slice(2).map((value, index) => {
+        const cell = row.getCell(index + 3);
         const color = cell.fill?.fgColor?.argb || null;
         const theme = cell.fill?.fgColor?.theme || null;
 
@@ -97,6 +97,7 @@
         });
       }
     });
+    console.log(extractedEvents);
     return extractedEvents;
   }
 
@@ -109,7 +110,7 @@
     if (cellData.color === 'FF00B0F0') {
       return '12H Jour';
     }
-    if (cellData.color_theme === 9) {
+    if (cellData.color === 'FFF79646') {
       return '12H Nuit';
     }
     return '24H';
@@ -181,21 +182,6 @@
   }
 
   /**
-   * Formate la date pour un affichage en français avec le jour, mois et année.
-   * @param dateString - La date en chaîne de caractères
-   * @returns La date formatée
-   */
-  function formatDisplayDate(dateString: string): string {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('fr-FR', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    }).format(date);
-  }
-
-  /**
    * Génère un fichier iCal pour les événements filtrés.
    */
 function generateICal() {
@@ -249,7 +235,7 @@ function generateICal() {
     <ul class="event-list">
       {#each events as event}
         <li class="event-item">
-          <span class="date">{formatDisplayDate(event.date)}</span>
+          <span class="date">{event.date}</span>
           <span class="service-type">{getServiceTypeForSelectedName(event) || 'Inconnu'}</span>
           <span class="team">{event.equipe}</span>
         </li>
